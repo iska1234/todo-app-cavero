@@ -6,54 +6,58 @@ import { PageTitleComponent } from '../../components/page-title/page-title.compo
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { StateService } from '../../services/state.service';
 import { ToastrService } from 'ngx-toastr';
-import { filterTasksByAsc, filterTasksByDesc } from '../../utils/filter-date.util';
+import {
+  filterTasksByAsc,
+  filterTasksByDesc,
+} from '../../utils/filter-date.util';
 
 @Component({
   selector: 'app-all-tasks',
   standalone: true,
-  imports: [FormsModule, DatePipe, PageTitleComponent, TaskListComponent,],
+  imports: [FormsModule, DatePipe, PageTitleComponent, TaskListComponent],
   templateUrl: './all-tasks.component.html',
 })
 export class AllTasksComponent {
-
   // Variables para el manejo de tareas
-  newTask="";
+  newTask = '';
   initialTaskList: any[] = [];
-  taskList:any[]=[];
+  taskList: any[] = [];
 
   // Servicios y servicios de emisión de eventos
   httpService = inject(HttpService);
-  stateService = inject(StateService)
-  toastr = inject(ToastrService)
+  stateService = inject(StateService);
+  toastr = inject(ToastrService);
   taskUpdated: EventEmitter<void> = new EventEmitter<void>();
 
-  ngOnInit(){
+  ngOnInit() {
     // Suscribirse al servicio de búsqueda y obtener todas las tareas al inicializar
     this.stateService.searchSubject.subscribe((value) => {
-      if(value){
-        this.taskList = this.initialTaskList.filter((x) => x.title.toLowerCase().includes(value.toLowerCase()))
-      }else{
+      if (value) {
+        this.taskList = this.initialTaskList.filter((x) =>
+          x.title.toLowerCase().includes(value.toLowerCase())
+        );
+      } else {
         this.taskList = this.initialTaskList;
       }
-    })
+    });
     this.getAllTasks();
   }
 
   // Agregar una nueva tarea
-  addTask(){
+  addTask() {
     this.httpService.addTask(this.newTask).subscribe(() => {
-      this.newTask = "";
+      this.newTask = '';
       this.getAllTasks(); // Actualizar la lista de tareas después de agregar una nueva tarea
       this.showsuccess(); // Mostrar mensaje de éxito
-    })
+    });
   }
 
   // Obtener todas las tareas
-  getAllTasks(){
-    this.httpService.getAllTasks().subscribe((result:any) => {
-      this.initialTaskList =  this.taskList=result;
+  getAllTasks() {
+    this.httpService.getAllTasks().subscribe((result: any) => {
+      this.initialTaskList = this.taskList = result;
       this.applyFilter(); // Aplicar filtro después de obtener las tareas
-    })
+    });
   }
 
   // Marcar una tarea como completada
@@ -92,9 +96,7 @@ export class AllTasksComponent {
   }
 
   // Método para realizar una búsqueda
-  search(searchTerm:any){
-
-  }
+  search(searchTerm: any) {}
 
   // Eliminar una tarea
   deleteTask(task: any) {
@@ -104,44 +106,43 @@ export class AllTasksComponent {
     });
   }
 
-
   // Aplicar filtro a la lista de tareas
-  selectedFilter: string = 'asc'
+  selectedFilter: string = 'asc';
   applyFilter() {
     switch (this.selectedFilter) {
-        case 'asc':
-            this.taskList = filterTasksByAsc(this.initialTaskList);
-            break;
-        case 'desc':
-            this.taskList = filterTasksByDesc(this.initialTaskList);
-            break;
-        default:
-            break;
+      case 'asc':
+        this.taskList = filterTasksByAsc(this.initialTaskList);
+        break;
+      case 'desc':
+        this.taskList = filterTasksByDesc(this.initialTaskList);
+        break;
+      default:
+        break;
     }
-}
+  }
 
   // Mostrar mensajes de alerta
-  showsuccess(){
+  showsuccess() {
     this.toastr.success('Task Added Sucessfully.', 'Success');
   }
 
-  showUpdatedImportant(){
+  showUpdatedImportant() {
     this.toastr.info('Updated task to important.', 'Updated');
   }
 
-  showUpdatedCompleted(){
+  showUpdatedCompleted() {
     this.toastr.info('Updated task to Completed.', 'Updated');
   }
 
-  showClearImportant(){
+  showClearImportant() {
     this.toastr.warning('Removed task from Important.', 'Updated');
   }
 
-  showClearCompleted(){
+  showClearCompleted() {
     this.toastr.warning('Removed task from Completed.', 'Updated');
   }
 
-  showDelete(){
+  showDelete() {
     this.toastr.error('Task Deleted Sucessfully.', 'Deleted');
   }
 }

@@ -13,9 +13,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ModalEditComponent {
 
-  // Inyección para la alerta
-  toastr = inject(ToastrService)
-
   // Evento de emisión para cuando se actualiza una tarea
   @Output() updated = new EventEmitter<any>();
   // Evento de emisión para cuando se actualiza la lista de tareas
@@ -33,11 +30,17 @@ export class ModalEditComponent {
 
   constructor(
     // Inyección de datos del diálogo
-    @Inject(MAT_DIALOG_DATA) public data: { id: number, title: string, creationTime: string, important: boolean, completed: boolean },
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      id: number;
+      title: string;
+      creationTime: string;
+      important: boolean;
+      completed: boolean;
+    },
     // Servicio HTTP para actualizar la tarea
     private httpService: HttpService
   ) {}
-
 
   // Método para actualizar la tarea
   updateTask() {
@@ -47,15 +50,8 @@ export class ModalEditComponent {
     this.httpService.updateTask(taskToUpdate).subscribe((updatedTask) => {
       // Emitir el evento de actualización con la tarea actualizada y su ID
       this.updated.emit({ id: this.data.id, updatedTask });
-      // Alerta de actualización
-      this.showUpdated()
       // Recargar la página para reflejar los cambios
       window.location.reload();
     });
-  }
-
-
-  showUpdated(){
-    this.toastr.info('Updated task', 'Updated');
   }
 }

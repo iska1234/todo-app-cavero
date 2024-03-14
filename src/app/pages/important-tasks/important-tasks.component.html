@@ -1,4 +1,14 @@
-<app-page-title></app-page-title>
+<div class="flex justify-between w-full">
+  <app-page-title></app-page-title>
+  <select
+    [(ngModel)]="selectedFilter"
+    (change)="applyFilter()"
+    class="block appearance-none w-24 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+  >
+  <option value="asc">Recent</option>
+  <option value="desc">Latest</option>
+  </select>
+</div>
 
 <div class="flex flex-col mt-6">
   <app-task-list

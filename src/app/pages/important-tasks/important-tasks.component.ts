@@ -5,11 +5,13 @@ import { HttpService } from '../../services/http.service';
 import { StateService } from '../../services/state.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { filterTasksByAsc, filterTasksByDesc } from '../../utils/filter-date.util';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-important-tasks',
   standalone: true,
-  imports: [PageTitleComponent, TaskListComponent, CommonModule],
+  imports: [FormsModule ,PageTitleComponent, TaskListComponent, CommonModule],
   templateUrl: './important-tasks.component.html',
 })
 export class ImportantTasksComponent {
@@ -78,6 +80,21 @@ export class ImportantTasksComponent {
       this.getAllTasks();
       this.showDelete(); // Muestra una alerta
     });
+  }
+
+  // Aplicar filtro a la lista de tareas
+  selectedFilter: string = 'asc';
+  applyFilter() {
+    switch (this.selectedFilter) {
+      case 'asc':
+        this.taskList = filterTasksByAsc(this.initialTaskList);
+        break;
+      case 'desc':
+        this.taskList = filterTasksByDesc(this.initialTaskList);
+        break;
+      default:
+        break;
+    }
   }
 
   // Muestra una alerta de que se ha eliminado una tarea importante

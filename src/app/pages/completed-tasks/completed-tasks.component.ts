@@ -5,11 +5,13 @@ import { PageTitleComponent } from '../../components/page-title/page-title.compo
 import { StateService } from '../../services/state.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { FormsModule } from '@angular/forms';
+import { filterTasksByAsc, filterTasksByDesc } from '../../utils/filter-date.util';
 
 @Component({
   selector: 'app-completed-tasks',
   standalone: true,
-  imports: [TaskListComponent, PageTitleComponent, CommonModule],
+  imports: [FormsModule, TaskListComponent, PageTitleComponent, CommonModule],
   templateUrl: './completed-tasks.component.html',
 })
 export class CompletedTasksComponent {
@@ -93,6 +95,21 @@ export class CompletedTasksComponent {
       this.getAllTasks();
       this.showDelete(); // Muestra una alerta
     });
+  }
+
+  // Aplicar filtro a la lista de tareas
+  selectedFilter: string = 'asc';
+  applyFilter() {
+    switch (this.selectedFilter) {
+      case 'asc':
+        this.taskList = filterTasksByAsc(this.initialTaskList);
+        break;
+      case 'desc':
+        this.taskList = filterTasksByDesc(this.initialTaskList);
+        break;
+      default:
+        break;
+    }
   }
 
   // Alertas para acciones realizadas
