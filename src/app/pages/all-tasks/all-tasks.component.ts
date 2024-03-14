@@ -15,15 +15,20 @@ import { filterTasksByAsc, filterTasksByDesc } from '../../utils/filter-date.uti
   templateUrl: './all-tasks.component.html',
 })
 export class AllTasksComponent {
+
+  // Variables para el manejo de tareas
   newTask="";
   initialTaskList: any[] = [];
   taskList:any[]=[];
+
+  // Servicios y servicios de emisión de eventos
   httpService = inject(HttpService);
   stateService = inject(StateService)
   toastr = inject(ToastrService)
   taskUpdated: EventEmitter<void> = new EventEmitter<void>();
 
   ngOnInit(){
+    // Suscribirse al servicio de búsqueda y obtener todas las tareas al inicializar
     this.stateService.searchSubject.subscribe((value) => {
       if(value){
         this.taskList = this.initialTaskList.filter((x) => x.title.toLowerCase().includes(value.toLowerCase()))
@@ -34,68 +39,73 @@ export class AllTasksComponent {
     this.getAllTasks();
   }
 
+  // Agregar una nueva tarea
   addTask(){
     this.httpService.addTask(this.newTask).subscribe(() => {
       this.newTask = "";
-      this.getAllTasks();
-      this.showsuccess();
+      this.getAllTasks(); // Actualizar la lista de tareas después de agregar una nueva tarea
+      this.showsuccess(); // Mostrar mensaje de éxito
     })
   }
 
-  onTaskUpdated() {
-    this.getAllTasks();
-  }
+  // Obtener todas las tareas
   getAllTasks(){
     this.httpService.getAllTasks().subscribe((result:any) => {
       this.initialTaskList =  this.taskList=result;
-      this.applyFilter();
+      this.applyFilter(); // Aplicar filtro después de obtener las tareas
     })
   }
 
+  // Marcar una tarea como completada
   onCompleted(task: any) {
     task.completed = true;
     this.updateTask(task);
     this.showUpdatedCompleted();
   }
 
+  // Marcar una tarea como importante
   onImportant(task: any) {
     task.important = true;
     this.updateTask(task);
     this.showUpdatedImportant();
   }
 
+  // Limpiar la marca de una tarea como completada
   clearCompleted(task: any) {
     task.completed = false;
     this.updateTask(task);
     this.showClearCompleted();
   }
 
+  // Limpiar la marca de una tarea como importante
   clearImportant(task: any) {
     task.important = false;
     this.updateTask(task);
     this.showClearImportant();
   }
 
+  // Actualizar una tarea
   updateTask(task: any) {
     this.httpService.updateTask(task).subscribe(() => {
-      this.getAllTasks();
+      this.getAllTasks(); // Actualizar la lista de tareas después de actualizar una tarea
     });
   }
 
-
+  // Método para realizar una búsqueda
   search(searchTerm:any){
 
   }
 
+  // Eliminar una tarea
   deleteTask(task: any) {
-    this.httpService.deteleTask(task).subscribe(() => {
-      this.getAllTasks();
-      this.showDelete();
+    this.httpService.deleteTask(task).subscribe(() => {
+      this.getAllTasks(); // Actualizar la lista de tareas después de eliminar una tarea
+      this.showDelete(); // Mostrar mensaje de eliminación
     });
   }
 
 
-  //
+  // Aplicar filtro a la lista de tareas
   selectedFilter: string = 'asc'
   applyFilter() {
     switch (this.selectedFilter) {
@@ -110,8 +120,7 @@ export class AllTasksComponent {
     }
 }
 
-  //Alertas
-  //Si se presiona el mismo no aceptarán duplicados
+  // Mostrar mensajes de alerta
   showsuccess(){
     this.toastr.success('Task Added Sucessfully.', 'Success');
   }

@@ -13,45 +13,52 @@ import { ModalEditComponent } from '../modal-edit/modal-edit.component';
 export class TaskListComponent {
 
   constructor(public dialog: MatDialog) {}
-  @Input() taskList: any[] = [];
-  @Output() important = new EventEmitter<any>();
-  @Output() completed = new EventEmitter<any>();
-  @Output() clearImportant = new EventEmitter<any>();
-  @Output() clearCompleted = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<any>();
-  @Output() updated = new EventEmitter<any>();
 
+  @Input() taskList: any[] = []; // Lista de tareas recibida desde el componente padre
+  @Output() important = new EventEmitter<any>(); // Evento emitido al marcar una tarea como importante
+  @Output() completed = new EventEmitter<any>(); // Evento emitido al marcar una tarea como completada
+  @Output() clearImportant = new EventEmitter<any>(); // Evento emitido al limpiar la marca de una tarea como importante
+  @Output() clearCompleted = new EventEmitter<any>(); // Evento emitido al limpiar la marca de una tarea como completada
+  @Output() delete = new EventEmitter<any>(); // Evento emitido al eliminar una tarea
+
+  // Abrir el diálogo de edición de tarea
   openDialog(task: any) {
     const dialogRef = this.dialog.open(ModalEditComponent, {
-      data: { id: task.id, title: task.title }
+      data: { ...task } // Pasar los datos de la tarea al componente ModalEditComponent
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
+      // Acciones despues de cerrar el modal
     });
   }
 
-
+  // Marcar una tarea como importante
   markImportant(task: any) {
     task.important = true;
-    this.important.emit(task);
+    this.important.emit(task); // Emitir evento de tarea importante
   }
 
+  // Limpiar la marca de una tarea como importante
   cImportant(task: any) {
     task.important = false;
-    this.clearImportant.emit(task);
+    this.clearImportant.emit(task); // Emitir evento de limpieza de marca de tarea importante
   }
 
+  // Marcar una tarea como completada
   markCompleted(task: any) {
     task.completed = true;
-    this.completed.emit(task);
+    this.completed.emit(task); // Emitir evento de tarea completada
   }
 
+  // Limpiar la marca de una tarea como completada
   cCompleted(task: any) {
     task.completed = false;
-    this.clearCompleted.emit(task);
+    this.clearCompleted.emit(task); // Emitir evento de limpieza de marca de tarea completada
   }
+
+  // Eliminar una tarea
   deleteTask(task: any) {
-    this.delete.emit(task);
+    this.delete.emit(task); // Emitir evento de eliminación de tarea
   }
 
 }

@@ -13,14 +13,19 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './important-tasks.component.html',
 })
 export class ImportantTasksComponent {
+
+  // Variables para el manejo de tareas
   newTask="";
   initialTaskList: any[] = [];
   taskList:any[]=[];
+
+  // Servicios y servicios de emisión de eventos
   httpService = inject(HttpService);
   stateService = inject(StateService)
   toastr = inject(ToastrService)
 
   ngOnInit(){
+    // Suscríbete al BehaviorSubject en StateService para buscar tareas importantes
     this.stateService.searchSubject.subscribe((value) => {
       if(value){
         this.taskList = this.initialTaskList.filter((x) => x.title.toLowerCase().includes(value.toLowerCase()))
@@ -28,10 +33,11 @@ export class ImportantTasksComponent {
         this.taskList = this.initialTaskList;
       }
     })
-    this.getAllTasks();
+    this.getAllTasks(); // Obtiene todas las tareas importantes al inicializar el componente
   }
 
   getAllTasks(){
+    // Obtiene todas las tareas y filtra las importantes
     this.httpService.getAllTasks().subscribe((result:any) => {
       this.initialTaskList = this.taskList=result.filter((x:any)=> x.important == true);
     })
@@ -39,48 +45,52 @@ export class ImportantTasksComponent {
 
   onCompleted(task: any) {
     task.completed = true;
-    this.updateTask(task);
+    this.updateTask(task); // Actualiza la tarea completada
   }
 
   onImportant(task: any) {
     task.important = true;
-    this.updateTask(task);
+    this.updateTask(task); // Actualiza la tarea importante
   }
 
   clearCompleted(task: any) {
     task.completed = false;
-    this.updateTask(task);
-    this.showClearCompleted();
+    this.updateTask(task); // Actualiza la tarea completada
+    this.showClearCompleted(); // Muestra una alerta
   }
 
   clearImportant(task: any) {
     task.important = false;
-    this.updateTask(task);
-    this.showClearImportant();
+    this.updateTask(task); // Actualiza la tarea importante
+    this.showClearImportant(); // Muestra una alerta
   }
 
   updateTask(task: any) {
+    // Actualiza la tarea en el servidor y vuelve a cargar las tareas importantes
     this.httpService.updateTask(task).subscribe(() => {
       this.getAllTasks();
     });
   }
 
   deleteTask(task: any) {
-    this.httpService.deteleTask(task).subscribe(() => {
+    // Elimina la tarea del servidor y vuelve a cargar las tareas importantes
+    this.httpService.deleteTask(task).subscribe(() => {
       this.getAllTasks();
-      this.showDelete();
+      this.showDelete(); // Muestra una alerta
     });
   }
-  //Alertas
-  //Si se presiona el mismo no aceptarán duplicados
+
+  // Muestra una alerta de que se ha eliminado una tarea importante
   showClearImportant(){
     this.toastr.warning('Removed task from Important.', 'Updated');
   }
 
+  // Muestra una alerta de que se ha eliminado una tarea completada
   showClearCompleted(){
     this.toastr.warning('Removed task from Completed.', 'Updated');
   }
 
+  // Muestra una alerta de que se ha eliminado una tarea
   showDelete(){
     this.toastr.error('Task Deleted Sucessfully.', 'Deleted');
   }

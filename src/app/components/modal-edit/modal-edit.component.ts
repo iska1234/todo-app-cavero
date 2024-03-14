@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { HttpService } from '../../services/http.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal-edit',
@@ -12,10 +13,18 @@ import { HttpService } from '../../services/http.service';
 })
 export class ModalEditComponent {
 
-  @Output() updated = new EventEmitter<any>();
+  // Inyección para la alerta
+  toastr = inject(ToastrService)
 
+  // Evento de emisión para cuando se actualiza una tarea
+  @Output() updated = new EventEmitter<any>();
+  // Evento de emisión para cuando se actualiza la lista de tareas
+  @Output() taskUpdated = new EventEmitter<void>();
+
+  // Variable para almacenar la tarea actualizada
   updatedTask: string = '';
 
+  // Método para expandir automáticamente el área de texto
   autoExpand(event: any) {
     const textarea = event.target;
     textarea.style.height = 'auto';
@@ -23,15 +32,30 @@ export class ModalEditComponent {
   }
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { id: number, title: string },
+    // Inyección de datos del diálogo
+    @Inject(MAT_DIALOG_DATA) public data: { id: number, title: string, creationTime: string, important: boolean, completed: boolean },
+    // Servicio HTTP para actualizar la tarea
     private httpService: HttpService
   ) {}
 
+
+  // Método para actualizar la tarea
   updateTask() {
-    const taskToUpdate = { id: this.data.id, title: this.updatedTask };
+    // Crear un objeto con los datos actualizados de la tarea
+    const taskToUpdate = { ...this.data, title: this.updatedTask };
+    // Llamar al servicio HTTP para actualizar la tarea en el servidor
     this.httpService.updateTask(taskToUpdate).subscribe((updatedTask) => {
-      this.updated.emit(updatedTask);
+      // Emitir el evento de actualización con la tarea actualizada y su ID
+      this.updated.emit({ id: this.data.id, updatedTask });
+      // Alerta de actualización
+      this.showUpdated()
+      // Recargar la página para reflejar los cambios
       window.location.reload();
     });
+  }
+
+
+  showUpdated(){
+    this.toastr.info('Updated task', 'Updated');
   }
 }
