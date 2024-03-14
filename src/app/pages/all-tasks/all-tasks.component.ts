@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpService } from '../../services/http.service';
 import { DatePipe } from '@angular/common';
@@ -6,6 +6,7 @@ import { PageTitleComponent } from '../../components/page-title/page-title.compo
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { StateService } from '../../services/state.service';
 import { ToastrService } from 'ngx-toastr';
+import { filterTasksByAsc, filterTasksByDesc } from '../../utils/filter-date.util';
 
 @Component({
   selector: 'app-all-tasks',
@@ -20,6 +21,7 @@ export class AllTasksComponent {
   httpService = inject(HttpService);
   stateService = inject(StateService)
   toastr = inject(ToastrService)
+  taskUpdated: EventEmitter<void> = new EventEmitter<void>();
 
   ngOnInit(){
     this.stateService.searchSubject.subscribe((value) => {
@@ -40,13 +42,15 @@ export class AllTasksComponent {
     })
   }
 
+  onTaskUpdated() {
+    this.getAllTasks();
+  }
   getAllTasks(){
     this.httpService.getAllTasks().subscribe((result:any) => {
       this.initialTaskList =  this.taskList=result;
+      this.applyFilter();
     })
   }
-
-
 
   onCompleted(task: any) {
     task.completed = true;
@@ -77,6 +81,8 @@ export class AllTasksComponent {
       this.getAllTasks();
     });
   }
+
+
   search(searchTerm:any){
 
   }
@@ -87,6 +93,22 @@ export class AllTasksComponent {
       this.showDelete();
     });
   }
+
+
+  //
+  selectedFilter: string = 'asc'
+  applyFilter() {
+    switch (this.selectedFilter) {
+        case 'asc':
+            this.taskList = filterTasksByAsc(this.initialTaskList);
+            break;
+        case 'desc':
+            this.taskList = filterTasksByDesc(this.initialTaskList);
+            break;
+        default:
+            break;
+    }
+}
 
   //Alertas
   //Si se presiona el mismo no aceptarán duplicados

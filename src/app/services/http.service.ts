@@ -10,10 +10,14 @@ export class HttpService {
   constructor() {}
 
   addTask(task: string) {
+    const creationTime = new Date().toISOString();
+
     return this.httpClient.post('http://localhost:3000/tasks', {
       title: task,
+      creationTime: creationTime
     });
   }
+
 
   getAllTasks() {
     return this.httpClient.get('http://localhost:3000/tasks');

@@ -19,13 +19,17 @@ export class TaskListComponent {
   @Output() clearImportant = new EventEmitter<any>();
   @Output() clearCompleted = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  @Output() updated = new EventEmitter<any>();
 
-  modalEdit() {
-    const dialogRef = this.dialog.open(ModalEditComponent);
+  openDialog(task: any) {
+    const dialogRef = this.dialog.open(ModalEditComponent, {
+      data: { id: task.id, title: task.title }
+    });
+
     dialogRef.afterClosed().subscribe(result => {
-
     });
   }
+
 
   markImportant(task: any) {
     task.important = true;

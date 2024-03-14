@@ -1,4 +1,13 @@
-<app-page-title (search)="search($event)"></app-page-title>
+<div class="flex justify-between w-full">
+  <app-page-title (search)="search($event)"></app-page-title>
+  <select [(ngModel)]="selectedFilter" (change)="applyFilter()"
+          class="block appearance-none w-24 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+    <option value="asc">Asc</option>
+    <option value="desc">Desc</option>
+  </select>
+</div>
+
+
 <div class="flex mt-6">
   <input
     class="w-full h-16 px-4 py-2 rounded shadow"
@@ -17,4 +26,5 @@
     (clearCompleted)="clearCompleted($event)"
     (delete)="deleteTask($event)"
   ></app-task-list>
+
 </div>
