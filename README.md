@@ -2,6 +2,15 @@
 
 This project is a todo list application developed with Angular.
 
+## Demo
+### Pc View
+![image](https://github.com/iska1234/todo-app-cavero/assets/119825666/605fc190-776d-482b-98e8-7f3618584650)
+
+### Mobile View
+
+![image](https://github.com/iska1234/todo-app-cavero/assets/119825666/9391a993-7236-48b9-87b4-c06d70f43cb5)
+
+
 ## Development server
 
 ## Features
