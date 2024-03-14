@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { PageTitleComponent } from '../../components/page-title/page-title.component';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
 import { StateService } from '../../services/state.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-all-tasks',
@@ -18,6 +19,7 @@ export class AllTasksComponent {
   taskList:any[]=[];
   httpService = inject(HttpService);
   stateService = inject(StateService)
+  toastr = inject(ToastrService)
 
   ngOnInit(){
     this.stateService.searchSubject.subscribe((value) => {
@@ -34,6 +36,7 @@ export class AllTasksComponent {
     this.httpService.addTask(this.newTask).subscribe(() => {
       this.newTask = "";
       this.getAllTasks();
+      this.showsuccess();
     })
   }
 
@@ -43,24 +46,30 @@ export class AllTasksComponent {
     })
   }
 
+
+
   onCompleted(task: any) {
     task.completed = true;
     this.updateTask(task);
+    this.showUpdatedCompleted();
   }
 
   onImportant(task: any) {
     task.important = true;
     this.updateTask(task);
+    this.showUpdatedImportant();
   }
 
   clearCompleted(task: any) {
     task.completed = false;
     this.updateTask(task);
+    this.showClearCompleted();
   }
 
   clearImportant(task: any) {
     task.important = false;
     this.updateTask(task);
+    this.showClearImportant();
   }
 
   updateTask(task: any) {
@@ -70,5 +79,38 @@ export class AllTasksComponent {
   }
   search(searchTerm:any){
 
+  }
+
+  deleteTask(task: any) {
+    this.httpService.deteleTask(task).subscribe(() => {
+      this.getAllTasks();
+      this.showDelete();
+    });
+  }
+
+  //Alertas
+  //Si se presiona el mismo no aceptarán duplicados
+  showsuccess(){
+    this.toastr.success('Task Added Sucessfully.', 'Success');
+  }
+
+  showUpdatedImportant(){
+    this.toastr.info('Updated task to important.', 'Updated');
+  }
+
+  showUpdatedCompleted(){
+    this.toastr.info('Updated task to Completed.', 'Updated');
+  }
+
+  showClearImportant(){
+    this.toastr.warning('Removed task from Important.', 'Updated');
+  }
+
+  showClearCompleted(){
+    this.toastr.warning('Removed task from Completed.', 'Updated');
+  }
+
+  showDelete(){
+    this.toastr.error('Task Deleted Sucessfully.', 'Deleted');
   }
 }

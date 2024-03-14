@@ -7,7 +7,7 @@
   (important)="onImportant($event)"
   (clearImportant)="clearImportant($event)"
   (clearCompleted)="clearCompleted($event)"
-
+  (delete)="deleteTask($event)"
   ></app-task-list>
-  <div *ngIf="taskList.length === 0" class="mt-4 text-gray-500">No hay tareas completadas</div>
+  <div *ngIf="taskList.length === 0" class="mt-4 text-gray-500 text-2xl">No hay tareas completadas</div>
 </div>

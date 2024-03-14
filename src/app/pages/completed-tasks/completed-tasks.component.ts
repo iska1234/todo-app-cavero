@@ -4,6 +4,7 @@ import { TaskListComponent } from '../../components/task-list/task-list.componen
 import { PageTitleComponent } from '../../components/page-title/page-title.component';
 import { StateService } from '../../services/state.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-completed-tasks',
@@ -18,6 +19,7 @@ export class CompletedTasksComponent {
   taskList:any[]=[];
   httpService = inject(HttpService);
   stateService = inject(StateService)
+  toastr = inject(ToastrService)
 
   ngOnInit(){
     this.stateService.searchSubject.subscribe((value) => {
@@ -49,11 +51,13 @@ export class CompletedTasksComponent {
   clearCompleted(task: any) {
     task.completed = false;
     this.updateTask(task);
+    this.showClearCompleted();
   }
 
   clearImportant(task: any) {
     task.important = false;
     this.updateTask(task);
+    this.showClearImportant();
   }
 
   updateTask(task: any) {
@@ -62,4 +66,24 @@ export class CompletedTasksComponent {
     });
   }
 
+  deleteTask(task: any) {
+    this.httpService.deteleTask(task).subscribe(() => {
+      this.getAllTasks();
+      this.showDelete();
+    });
+  }
+
+  //Alertas
+  //Si se presiona el mismo no aceptarán duplicados
+  showClearImportant(){
+    this.toastr.warning('Removed task from Important.', 'Updated');
+  }
+
+  showClearCompleted(){
+    this.toastr.warning('Removed task from Completed.', 'Updated');
+  }
+
+  showDelete(){
+    this.toastr.error('Task Deleted Sucessfully.', 'Deleted');
+  }
 }
