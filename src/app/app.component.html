@@ -1,5 +1,8 @@
 <app-header></app-header>
-<app-sidebar></app-sidebar>
-<main class="bg-gray-100 ml-80 mt-16 h-full min-h-[calc(100dvh_-_4rem)] py-8 px-6">
+  <div class="md:hidden">
+    <app-sidebar></app-sidebar>
+  </div>
+
+<main class="bg-gray-100 ml-80 mt-16 h-full min-h-[calc(100dvh_-_4rem)] py-8 px-6 md:ml-0">
   <router-outlet></router-outlet>
 </main>

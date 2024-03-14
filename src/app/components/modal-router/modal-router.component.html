@@ -1,0 +1,33 @@
+<mat-dialog-content class="flex flex-col items-center justify-center ">
+  <ul>
+    <li
+      [routerLink]="'/'"
+      class="p-4 text-blue-600"
+      routerLinkActive="font-bold"
+      [routerLinkActiveOptions]="{exact:true}"
+      mat-dialog-close
+    >
+      All
+    </li>
+    <li
+      [routerLink]="'/importants'"
+      class="p-4  text-blue-600"
+      routerLinkActive="font-bold"
+      mat-dialog-close
+    >
+      Important
+    </li>
+    <li
+      [routerLink]="'/completed'"
+      class="p-4 text-blue-600"
+      routerLinkActive="font-bold"
+      mat-dialog-close
+    >
+      Completed
+    </li>
+  </ul>
+  <mat-dialog-actions class="flex gap-4" align="end">
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Cancel</button>
+  </mat-dialog-actions>
+
+</mat-dialog-content>

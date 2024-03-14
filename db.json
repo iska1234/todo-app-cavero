@@ -40,7 +40,8 @@
       "id": "46ba",
       "title": "Prueba tarea 20",
       "creationTime": "2024-03-14T11:32:46.500Z",
-      "important": true
+      "important": true,
+      "completed": false
     },
     {
       "id": "9ac1",

@@ -1,8 +1,30 @@
-<header class="bg-blue-700 h-16 flex justify-center items-center fixed top-0 w-full z-50 min-w-dvw">
+<header
+  class="bg-blue-700 h-16 flex justify-center items-center fixed top-0 w-full z-50 min-w-dvw gap-x-8 md:justify-between md:px-10"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    class="w-6 h-6 text-white hidden md:block "
+    (click)="openDialog()"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+    />
+  </svg>
+
   <input
     type="text"
-    class="h-10 w-96 rounded p-4"
+    class="h-10 w-96 md:w-52 sm:w-44 rounded p-4"
     placeholder="search your tasks"
     [formControl]="searchControl"
   />
 </header>
+<div>
+
+</div>
+
