@@ -48,7 +48,7 @@ Run `npm run server` for a db.json server. Navigate to `http://localhost:3000/`.
 ## Built With
 
 <ul>
-  [GitHub Pages](https://pages.github.com/)
+  <li><a href="https://angular.io" target="_blank">Angular</a>The web framework used.</li>
   <li><a href="https://tailwindcss.com" target="_blank">Tailwind CSS</a>- A utility-first CSS framework.</li>
   <li><a href="https://www.npmjs.com/package/ngx-toastr?source=post_page-----185ac435011e----------------------" target="_blank">ngx-toastr</a> - A Toast notification package for Angular.</li>
   <li><a href="https://material.angular.io" target="_blank">Angular Material</a> - A UI component library for Angular.</li>
